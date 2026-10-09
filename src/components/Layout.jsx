@@ -37,8 +37,10 @@ export default function Layout({
   onViewChange,
   user,
   onLogout,
+  activeTab: activeTabProp,
+  setActiveTab: setActiveTabProp,
 }) {
-  const [activeNav, setActiveNav] = useState("overview");
+  const [activeNavInternal, setActiveNavInternal] = useState("overview");
   const [semester, setSemester] = useState(semesters[0]);
   const [semesterOpen, setSemesterOpen] = useState(false);
   const [viewInternal, setViewInternal] = useState("faculty");
@@ -46,6 +48,8 @@ export default function Layout({
   // Use controlled props if provided, otherwise fall back to internal state
   const view = viewProp ?? viewInternal;
   const setView = onViewChange ?? setViewInternal;
+  const activeNav = activeTabProp ?? activeNavInternal;
+  const setActiveNav = setActiveTabProp ?? setActiveNavInternal;
 
   // Derive display name and subtitle from user prop
   const displayName =

@@ -13,6 +13,7 @@ export default function App() {
 
   /* ---- Dashboard state ---- */
   const [view, setView] = useState("faculty");
+  const [activeTab, setActiveTab] = useState("overview");
   const [selectedStudent, setSelectedStudent] = useState(null);
   const [aiTargetStudent, setAiTargetStudent] = useState(null);
 
@@ -28,6 +29,7 @@ export default function App() {
     setCurrentUser(null);
     setSelectedStudent(null);
     setAiTargetStudent(null);
+    setActiveTab("overview");
     setView("faculty");
   };
 
@@ -47,10 +49,13 @@ export default function App() {
       onViewChange={setView}
       user={currentUser}
       onLogout={handleLogout}
+      activeTab={activeTab}
+      setActiveTab={setActiveTab}
     >
       {/* Swap content based on active view */}
       {view === "faculty" ? (
         <FacultyDashboard
+          activeTab={activeTab}
           onSelectStudent={(student) => setSelectedStudent(student)}
         />
       ) : (
