@@ -279,43 +279,56 @@ export default function FacultyDashboard({ onSelectStudent, activeTab = "overvie
     setAiPlan(null);
     setAiDropdownOpen(false);
 
-    const API_KEY = import.meta.env.VITE_GEMINI_API_KEY || "";
-    if (!API_KEY) {
+    const apiKey = import.meta.env.VITE_GEMINI_API_KEY || "";
+    if (!apiKey) {
+      console.log("No VITE_GEMINI_API_KEY found — using offline fallback.");
       await new Promise((r) => setTimeout(r, 1200));
       setAiPlan(generateInlinePlan(stu));
       setAiLoading(false);
       return;
     }
 
+    const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent?key=${apiKey}`;
+
     try {
-      const res = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            contents: [{
-              parts: [{
-                text:
-                  `You are an empathetic college academic counselor at GPREC following B.Tech Scheme 2023.\n` +
-                  `Student: ${stu.name} (Section: ${stu.section}, Mentor: ${stu.mentor})\n` +
-                  `Attendance: ${stu.attendance}%, CGPA: ${stu.currentCgpa}\n` +
-                  `Flags: ${stu.flags?.join("; ")}\n` +
-                  `Subjects: ${JSON.stringify(stu.subjects)}\n\n` +
-                  `Return ONLY valid JSON: {"vulnerability":"...","roadmap":{"week1":"...","week2":"...","week3":"..."},"counseling":"..."}`
-              }],
-            }],
-            generationConfig: { temperature: 0.7, maxOutputTokens: 1024 },
-          }),
-        }
-      );
-      if (!res.ok) throw new Error();
+      const promptText =
+        `You are an empathetic college academic counselor at GPREC following B.Tech Scheme 2023.\n` +
+        `Student: ${stu.name} (Section: ${stu.section}, Mentor: ${stu.mentor})\n` +
+        `Attendance: ${stu.attendance}%, CGPA: ${stu.currentCgpa}\n` +
+        `Flags: ${stu.flags?.join("; ")}\n` +
+        `Subjects: ${JSON.stringify(stu.subjects)}\n\n` +
+        `Return ONLY valid JSON: {"vulnerability":"...","roadmap":{"week1":"...","week2":"...","week3":"..."},"counseling":"..."}`;
+
+      const res = await fetch(endpoint, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          contents: [
+            {
+              role: "user",
+              parts: [{ text: promptText }],
+            },
+          ],
+        }),
+      });
+
+      console.log("Gemini API response status:", res.status);
+
+      if (!res.ok) {
+        const errorData = await res.json();
+        console.error("Gemini API Error details:", errorData);
+        throw new Error(`HTTP ${res.status}`);
+      }
+
       const json = await res.json();
       const raw = json?.candidates?.[0]?.content?.parts?.[0]?.text ?? "";
       const cleaned = raw.replace(/```json\s*/gi, "").replace(/```\s*/gi, "").trim();
       const parsed = JSON.parse(cleaned);
       setAiPlan(parsed);
-    } catch {
+    } catch (err) {
+      console.error("Gemini API call failed, falling back to offline plan:", err);
       setAiPlan(generateInlinePlan(stu));
     } finally {
       setAiLoading(false);
