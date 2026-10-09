@@ -12,13 +12,6 @@ import {
 } from "lucide-react";
 
 /* ------------------------------------------------------------------ */
-/*  Gemini API                                                         */
-/* ------------------------------------------------------------------ */
-const GEMINI_URL =
-  "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent";
-const API_KEY = import.meta.env.VITE_GEMINI_API_KEY || "";
-
-/* ------------------------------------------------------------------ */
 /*  Build the LLM prompt                                               */
 /* ------------------------------------------------------------------ */
 function buildPrompt(s) {
@@ -132,32 +125,52 @@ export default function AIAdvisorModal({ student, onClose }) {
     setLoading(true);
     setPlanData(null);
 
+    const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
+
     // No API key → immediate offline fallback
-    if (!API_KEY) {
+    if (!apiKey) {
+      console.log("No VITE_GEMINI_API_KEY found — using offline fallback.");
       await new Promise((r) => setTimeout(r, 1400));
       setPlanData(generateFallback(student));
       setLoading(false);
       return;
     }
 
+    const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+
     try {
-      const res = await fetch(`${GEMINI_URL}?key=${API_KEY}`, {
+      const promptText = buildPrompt(student);
+
+      const res = await fetch(endpoint, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify({
-          contents: [{ parts: [{ text: buildPrompt(student) }] }],
-          generationConfig: { temperature: 0.7, maxOutputTokens: 1024 },
+          contents: [
+            {
+              role: "user",
+              parts: [{ text: promptText }],
+            },
+          ],
         }),
       });
 
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      console.log("Gemini API response status:", res.status);
+
+      if (!res.ok) {
+        const errorData = await res.json();
+        console.error("Gemini API Error details:", errorData);
+        throw new Error(`HTTP ${res.status}`);
+      }
 
       const json = await res.json();
       const text = json?.candidates?.[0]?.content?.parts?.[0]?.text ?? "";
       if (!text) throw new Error("Empty Gemini response");
 
       setPlanData(parseResponse(text));
-    } catch {
+    } catch (err) {
+      console.error("Gemini API call failed, falling back to offline plan:", err);
       setPlanData(generateFallback(student));
     } finally {
       setLoading(false);
