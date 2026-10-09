@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Activity, GraduationCap, UserCircle, LogIn } from "lucide-react";
+import { Activity, GraduationCap, UserCircle, LogIn, Sun, Moon } from "lucide-react";
 import students from "../data/students.json";
 
 /* ------------------------------------------------------------------ */
@@ -21,7 +21,7 @@ const facultyPresets = [
 /* ================================================================== */
 /*  LOGIN PAGE                                                         */
 /* ================================================================== */
-export default function LoginPage({ onLogin }) {
+export default function LoginPage({ onLogin, darkMode, setDarkMode }) {
   const [tab, setTab] = useState("faculty"); // "faculty" | "student"
   const [facultyId, setFacultyId] = useState("");
   const [facultyPassword, setFacultyPassword] = useState("");
@@ -49,6 +49,21 @@ export default function LoginPage({ onLogin }) {
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 p-4">
+      {setDarkMode && (
+        <button
+          onClick={() => setDarkMode(!darkMode)}
+          className="fixed top-4 right-4 z-50 flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/10 text-white shadow-lg backdrop-blur-md transition-colors hover:bg-white/20"
+          title="Toggle Theme"
+          aria-label="Toggle Theme"
+        >
+          {darkMode ? (
+            <Sun size={18} className="text-amber-400" />
+          ) : (
+            <Moon size={18} className="text-slate-300" />
+          )}
+        </button>
+      )}
+
       {/* Decorative glow */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
         <div className="absolute left-1/2 top-1/3 h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-indigo-600/20 blur-[120px]" />

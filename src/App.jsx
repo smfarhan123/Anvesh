@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import LoginPage from "./components/LoginPage";
 import Layout from "./components/Layout";
 import FacultyDashboard from "./components/FacultyDashboard";
@@ -7,6 +7,26 @@ import StudentDetailModal from "./components/StudentDetailModal";
 import AIAdvisorModal from "./components/AIAdvisorModal";
 
 export default function App() {
+  /* ---- Theme state (Dark/Light mode) ---- */
+  const [darkMode, setDarkMode] = useState(() => {
+    const saved = localStorage.getItem("theme");
+    if (saved) return saved === "dark";
+    return (
+      window.matchMedia &&
+      window.matchMedia("(prefers-color-scheme: dark)").matches
+    );
+  });
+
+  useEffect(() => {
+    if (darkMode) {
+      document.documentElement.classList.add("dark");
+      localStorage.setItem("theme", "dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+      localStorage.setItem("theme", "light");
+    }
+  }, [darkMode]);
+
   /* ---- Auth state ---- */
   const [currentUser, setCurrentUser] = useState(null);
   // currentUser shape: { role: 'faculty' | 'student', data: { ... } } | null
@@ -20,8 +40,10 @@ export default function App() {
   /* ---- Handle login ---- */
   const handleLogin = (role, data) => {
     setCurrentUser({ role, data });
-    // Automatically set view based on login role
-    setView(role === "student" ? "student" : "faculty");
+    // Automatically set view and active tab based on login role
+    const nextView = role === "student" ? "student" : "faculty";
+    setView(nextView);
+    setActiveTab(role === "student" ? "My Overview" : "Overview");
   };
 
   /* ---- Handle logout ---- */
@@ -29,15 +51,27 @@ export default function App() {
     setCurrentUser(null);
     setSelectedStudent(null);
     setAiTargetStudent(null);
-    setActiveTab("overview");
+    setActiveTab("Overview");
     setView("faculty");
+  };
+
+  /* ---- Handle view toggle (Faculty <-> Student) ---- */
+  const handleViewChange = (newView) => {
+    setView(newView);
+    setActiveTab(newView === "student" ? "My Overview" : "Overview");
   };
 
   /* ============================================================ */
   /*  Not authenticated → Login Page                               */
   /* ============================================================ */
   if (!currentUser) {
-    return <LoginPage onLogin={handleLogin} />;
+    return (
+      <LoginPage
+        onLogin={handleLogin}
+        darkMode={darkMode}
+        setDarkMode={setDarkMode}
+      />
+    );
   }
 
   /* ============================================================ */
@@ -46,11 +80,13 @@ export default function App() {
   return (
     <Layout
       view={view}
-      onViewChange={setView}
+      onViewChange={handleViewChange}
       user={currentUser}
       onLogout={handleLogout}
       activeTab={activeTab}
       setActiveTab={setActiveTab}
+      darkMode={darkMode}
+      setDarkMode={setDarkMode}
     >
       {/* Swap content based on active view */}
       {view === "faculty" ? (
@@ -61,6 +97,7 @@ export default function App() {
       ) : (
         <StudentPortalView
           student={currentUser.role === "student" ? currentUser.data : undefined}
+          activeTab={activeTab}
         />
       )}
 

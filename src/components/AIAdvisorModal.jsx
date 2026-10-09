@@ -42,12 +42,10 @@ function buildPrompt(s) {
 /*  Offline / fail-safe fallback (student-aware mock)                  */
 /* ------------------------------------------------------------------ */
 function generateFallback(s) {
-  // Find weakest subject by combined sessional score
   const weakest = [...s.subjects].sort(
     (a, b) => a.internal1 + a.internal2 - (b.internal1 + b.internal2)
   )[0];
 
-  // Attendance-specific risk sentence
   const attSentence =
     s.attendance < 65
       ? `${s.name}'s overall attendance of ${s.attendance}% is below the 65% statutory minimum — this places the student in non-condonable detained/debarred territory under JNTUH regulations, and exam eligibility is directly at risk.`
@@ -86,7 +84,6 @@ function generateFallback(s) {
 /*  Parse Gemini response → structured plan object                     */
 /* ------------------------------------------------------------------ */
 function parseResponse(raw) {
-  // Strip markdown code fences if the model wrapped its JSON
   const cleaned = raw
     .replace(/```json\s*/gi, "")
     .replace(/```\s*/gi, "")
@@ -97,11 +94,8 @@ function parseResponse(raw) {
     if (obj.vulnerabilityAssessment && obj.roadmap && obj.counselingScript) {
       return obj;
     }
-  } catch {
-    /* fall through to regex */
-  }
+  } catch {}
 
-  // Best-effort regex extraction
   const grab = (key) => {
     const m = cleaned.match(
       new RegExp(`"${key}"\\s*:\\s*"((?:[^"\\\\]|\\\\.)*)"`, "s")
@@ -164,7 +158,6 @@ export default function AIAdvisorModal({ student, onClose }) {
 
       setPlanData(parseResponse(text));
     } catch {
-      // Network / API / parse error → graceful fallback
       setPlanData(generateFallback(student));
     } finally {
       setLoading(false);
@@ -184,9 +177,7 @@ export default function AIAdvisorModal({ student, onClose }) {
       await navigator.clipboard.writeText(planData.counselingScript);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
-    } catch {
-      /* clipboard blocked */
-    }
+    } catch {}
   };
 
   const handleAlert = () => {
@@ -203,13 +194,13 @@ export default function AIAdvisorModal({ student, onClose }) {
       onClick={onClose}
     >
       <div
-        className="relative max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-2xl border border-slate-100 bg-white p-6 shadow-2xl"
+        className="relative max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-2xl border border-slate-100 bg-white p-6 shadow-2xl transition-colors duration-200 dark:border-slate-800 dark:bg-slate-900"
         onClick={(e) => e.stopPropagation()}
       >
         {/* ---- Close ---- */}
         <button
           onClick={onClose}
-          className="absolute right-4 top-4 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-slate-100 text-slate-500 transition-colors hover:bg-slate-200 hover:text-slate-700"
+          className="absolute right-4 top-4 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-slate-100 text-slate-500 transition-colors hover:bg-slate-200 hover:text-slate-700 dark:bg-slate-800 dark:text-slate-400 dark:hover:bg-slate-700 dark:hover:text-slate-200"
           aria-label="Close"
         >
           <X size={18} />
@@ -221,12 +212,12 @@ export default function AIAdvisorModal({ student, onClose }) {
             <Sparkles size={20} />
           </div>
           <div>
-            <h2 className="text-lg font-bold text-slate-900">
+            <h2 className="text-lg font-bold text-slate-900 dark:text-white">
               AI Academic Intervention Engine
             </h2>
-            <p className="mt-0.5 text-sm text-slate-500">
+            <p className="mt-0.5 text-sm text-slate-500 dark:text-slate-400">
               Personalized recovery strategy for{" "}
-              <span className="font-semibold text-slate-700">
+              <span className="font-semibold text-slate-700 dark:text-slate-200">
                 {student.name}
               </span>{" "}
               ({student.rollNo})
@@ -236,7 +227,7 @@ export default function AIAdvisorModal({ student, onClose }) {
 
         {/* ---- Green alert banner (simulated dispatch) ---- */}
         {alertSent && (
-          <div className="mb-4 flex items-center gap-2 rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-2.5 text-sm font-medium text-emerald-700 animate-in fade-in">
+          <div className="mb-4 flex items-center gap-2 rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-2.5 text-sm font-medium text-emerald-700 dark:border-emerald-800 dark:bg-emerald-950/50 dark:text-emerald-400">
             <BellRing size={16} className="shrink-0" />
             Alert dispatched to student portal &amp; mentor desk
           </div>
@@ -247,38 +238,38 @@ export default function AIAdvisorModal({ student, onClose }) {
           /* ---------- Loading skeleton ---------- */
           <div className="flex flex-col items-center justify-center py-16">
             <Loader2 size={36} className="animate-spin text-indigo-500" />
-            <p className="mt-4 text-center text-sm font-medium text-slate-600">
+            <p className="mt-4 text-center text-sm font-medium text-slate-600 dark:text-slate-300">
               Analyzing Scheme 2023 CIA marks trajectory
               <br />
               and calculating attendance buffer…
             </p>
             <div className="mt-6 w-full max-w-md space-y-3">
-              <div className="h-4 w-full animate-pulse rounded-full bg-slate-200" />
-              <div className="h-4 w-5/6 animate-pulse rounded-full bg-slate-200" />
-              <div className="h-4 w-4/6 animate-pulse rounded-full bg-slate-200" />
+              <div className="h-4 w-full animate-pulse rounded-full bg-slate-200 dark:bg-slate-700" />
+              <div className="h-4 w-5/6 animate-pulse rounded-full bg-slate-200 dark:bg-slate-700" />
+              <div className="h-4 w-4/6 animate-pulse rounded-full bg-slate-200 dark:bg-slate-700" />
             </div>
           </div>
         ) : (
           planData && (
             <div className="space-y-4">
               {/* ---- 1. Vulnerability Assessment (Amber) ---- */}
-              <div className="rounded-xl border border-amber-200 bg-amber-50 p-4">
+              <div className="rounded-xl border border-amber-200 bg-amber-50 p-4 dark:border-amber-900/60 dark:bg-amber-950/40">
                 <div className="mb-2 flex items-center gap-2">
-                  <ShieldAlert size={18} className="text-amber-600" />
-                  <h4 className="text-sm font-bold text-amber-800">
+                  <ShieldAlert size={18} className="text-amber-600 dark:text-amber-400" />
+                  <h4 className="text-sm font-bold text-amber-800 dark:text-amber-200">
                     Vulnerability Assessment
                   </h4>
                 </div>
-                <p className="text-sm leading-relaxed text-amber-700">
+                <p className="text-sm leading-relaxed text-amber-700 dark:text-amber-300">
                   {planData.vulnerabilityAssessment}
                 </p>
               </div>
 
               {/* ---- 2. 3-Week Roadmap (Indigo) ---- */}
-              <div className="rounded-xl border border-indigo-200 bg-indigo-50 p-4">
+              <div className="rounded-xl border border-indigo-200 bg-indigo-50 p-4 dark:border-indigo-900/60 dark:bg-indigo-950/40">
                 <div className="mb-3 flex items-center gap-2">
-                  <CalendarRange size={18} className="text-indigo-600" />
-                  <h4 className="text-sm font-bold text-indigo-800">
+                  <CalendarRange size={18} className="text-indigo-600 dark:text-indigo-400" />
+                  <h4 className="text-sm font-bold text-indigo-800 dark:text-indigo-200">
                     3-Week Targeted Roadmap
                   </h4>
                 </div>
@@ -292,7 +283,7 @@ export default function AIAdvisorModal({ student, onClose }) {
                       <span className="mt-0.5 inline-flex h-fit shrink-0 rounded-md bg-indigo-600 px-2 py-0.5 text-[11px] font-bold leading-snug text-white">
                         {tag}
                       </span>
-                      <p className="text-sm leading-relaxed text-indigo-700">
+                      <p className="text-sm leading-relaxed text-indigo-700 dark:text-indigo-300">
                         {body}
                       </p>
                     </div>
@@ -301,14 +292,14 @@ export default function AIAdvisorModal({ student, onClose }) {
               </div>
 
               {/* ---- 3. Faculty Counseling Script (Teal) ---- */}
-              <div className="rounded-xl border border-teal-200 bg-teal-50 p-4">
+              <div className="rounded-xl border border-teal-200 bg-teal-50 p-4 dark:border-teal-900/60 dark:bg-teal-950/40">
                 <div className="mb-2 flex items-center gap-2">
-                  <MessageSquareHeart size={18} className="text-teal-600" />
-                  <h4 className="text-sm font-bold text-teal-800">
+                  <MessageSquareHeart size={18} className="text-teal-600 dark:text-teal-400" />
+                  <h4 className="text-sm font-bold text-teal-800 dark:text-teal-200">
                     Faculty Counseling Script
                   </h4>
                 </div>
-                <p className="text-sm italic leading-relaxed text-teal-700">
+                <p className="text-sm italic leading-relaxed text-teal-700 dark:text-teal-300">
                   {planData.counselingScript}
                 </p>
               </div>
@@ -318,14 +309,14 @@ export default function AIAdvisorModal({ student, onClose }) {
 
         {/* ========== FOOTER ========== */}
         {!loading && planData && (
-          <div className="mt-6 flex flex-wrap items-center justify-end gap-3 border-t border-slate-200 pt-4">
+          <div className="mt-6 flex flex-wrap items-center justify-end gap-3 border-t border-slate-200 pt-4 dark:border-slate-800">
             {/* Copy counseling script */}
             <button
               onClick={handleCopy}
               className={`inline-flex items-center gap-1.5 rounded-lg px-4 py-2 text-sm font-semibold transition-all ${
                 copied
-                  ? "border border-emerald-300 bg-emerald-50 text-emerald-700"
-                  : "border border-slate-200 bg-white text-slate-600 hover:bg-slate-50"
+                  ? "border border-emerald-300 bg-emerald-50 text-emerald-700 dark:border-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-400"
+                  : "border border-slate-200 bg-white text-slate-600 hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700"
               }`}
             >
               {copied ? <Check size={15} /> : <Copy size={15} />}
@@ -335,10 +326,10 @@ export default function AIAdvisorModal({ student, onClose }) {
             {/* Simulate alert */}
             <button
               onClick={handleAlert}
-              className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-600 transition-colors hover:bg-slate-50"
+              className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-600 transition-colors hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700"
             >
               <BellRing size={15} />
-              Simulate Parent/Student Alert
+              Simulate Alert
             </button>
 
             {/* Close */}
