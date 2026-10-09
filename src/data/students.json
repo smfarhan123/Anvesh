@@ -1,0 +1,265 @@
+[
+  {
+    "id": "239X1A05D1",
+    "name": "Shaik Farhan",
+    "rollNo": "239X1A05D1",
+    "section": "CSE-D",
+    "mentor": "Dr. K. Govardhan Reddy",
+    "attendance": 68.5,
+    "currentCgpa": 6.85,
+    "riskLevel": "Medium",
+    "attendanceStatus": "Condonation Required (65% - 75%)",
+    "subjects": [
+      {
+        "code": "CST201",
+        "name": "Discrete Mathematics & Graph Theory",
+        "attendance": 72.0,
+        "internal1": 24,
+        "internal2": 28,
+        "quiz1": 8,
+        "quiz2": 7
+      },
+      {
+        "code": "CST202",
+        "name": "Advanced Data Structures & Algorithms",
+        "attendance": 66.0,
+        "internal1": 18,
+        "internal2": 22,
+        "quiz1": 6,
+        "quiz2": 7
+      },
+      {
+        "code": "CST203",
+        "name": "Digital Logic & Computer Organization",
+        "attendance": 70.0,
+        "internal1": 26,
+        "internal2": 30,
+        "quiz1": 8,
+        "quiz2": 9
+      },
+      {
+        "code": "HST201",
+        "name": "Managerial Economics & Financial Analysis",
+        "attendance": 66.0,
+        "internal1": 20,
+        "internal2": 24,
+        "quiz1": 7,
+        "quiz2": 6
+      }
+    ],
+    "flags": [
+      "Attendance shortage (68.5%) - Requires CAC Condonation",
+      "Low Internal aggregate in ADSA (under 16/30)"
+    ]
+  },
+  {
+    "id": "239X1A05D2",
+    "name": "M. Arsalaan",
+    "rollNo": "239X1A05D2",
+    "section": "CSE-D",
+    "mentor": "Dr. K. Govardhan Reddy",
+    "attendance": 58.0,
+    "currentCgpa": 5.40,
+    "riskLevel": "Critical",
+    "attendanceStatus": "Detained / Debarred (< 65%)",
+    "subjects": [
+      {
+        "code": "CST201",
+        "name": "Discrete Mathematics & Graph Theory",
+        "attendance": 55.0,
+        "internal1": 14,
+        "internal2": 12,
+        "quiz1": 4,
+        "quiz2": 5
+      },
+      {
+        "code": "CST202",
+        "name": "Advanced Data Structures & Algorithms",
+        "attendance": 52.0,
+        "internal1": 12,
+        "internal2": 10,
+        "quiz1": 3,
+        "quiz2": 4
+      },
+      {
+        "code": "CST203",
+        "name": "Digital Logic & Computer Organization",
+        "attendance": 62.0,
+        "internal1": 18,
+        "internal2": 16,
+        "quiz1": 5,
+        "quiz2": 6
+      },
+      {
+        "code": "HST201",
+        "name": "Managerial Economics & Financial Analysis",
+        "attendance": 63.0,
+        "internal1": 15,
+        "internal2": 14,
+        "quiz1": 5,
+        "quiz2": 5
+      }
+    ],
+    "flags": [
+      "CRITICAL: Attendance (58.0%) below statutory 65% limit - Non-condonable detention",
+      "Subject attendance in ADSA critically low (52%)",
+      "Sessional drop across all theory subjects"
+    ]
+  },
+  {
+    "id": "239X1A05D3",
+    "name": "Syed Asim",
+    "rollNo": "239X1A05D3",
+    "section": "CSE-D",
+    "mentor": "Dr. S. Zahoor-ul-Haq",
+    "attendance": 84.5,
+    "currentCgpa": 8.75,
+    "riskLevel": "Safe",
+    "attendanceStatus": "Eligible Regular (≥ 75%)",
+    "subjects": [
+      {
+        "code": "CST201",
+        "name": "Discrete Mathematics & Graph Theory",
+        "attendance": 88.0,
+        "internal1": 36,
+        "internal2": 38,
+        "quiz1": 9.5,
+        "quiz2": 10
+      },
+      {
+        "code": "CST202",
+        "name": "Advanced Data Structures & Algorithms",
+        "attendance": 82.0,
+        "internal1": 34,
+        "internal2": 36,
+        "quiz1": 9,
+        "quiz2": 9.5
+      },
+      {
+        "code": "CST203",
+        "name": "Digital Logic & Computer Organization",
+        "attendance": 86.0,
+        "internal1": 38,
+        "internal2": 37,
+        "quiz1": 10,
+        "quiz2": 9
+      },
+      {
+        "code": "HST201",
+        "name": "Managerial Economics & Financial Analysis",
+        "attendance": 82.0,
+        "internal1": 32,
+        "internal2": 35,
+        "quiz1": 9,
+        "quiz2": 8.5
+      }
+    ],
+    "flags": []
+  },
+  {
+    "id": "239X1A05D4",
+    "name": "K. Arif",
+    "rollNo": "239X1A05D4",
+    "section": "CSE-D",
+    "mentor": "Dr. S. Zahoor-ul-Haq",
+    "attendance": 76.0,
+    "currentCgpa": 7.10,
+    "riskLevel": "Medium",
+    "attendanceStatus": "Eligible Regular (≥ 75%)",
+    "subjects": [
+      {
+        "code": "CST201",
+        "name": "Discrete Mathematics & Graph Theory",
+        "attendance": 78.0,
+        "internal1": 28,
+        "internal2": 16,
+        "quiz1": 8,
+        "quiz2": 7
+      },
+      {
+        "code": "CST202",
+        "name": "Advanced Data Structures & Algorithms",
+        "attendance": 74.0,
+        "internal1": 22,
+        "internal2": 18,
+        "quiz1": 7,
+        "quiz2": 6
+      },
+      {
+        "code": "CST203",
+        "name": "Digital Logic & Computer Organization",
+        "attendance": 76.0,
+        "internal1": 25,
+        "internal2": 24,
+        "quiz1": 7.5,
+        "quiz2": 8
+      },
+      {
+        "code": "HST201",
+        "name": "Managerial Economics & Financial Analysis",
+        "attendance": 76.0,
+        "internal1": 24,
+        "internal2": 22,
+        "quiz1": 7,
+        "quiz2": 7
+      }
+    ],
+    "flags": [
+      "Severe sessional decline in DMGT (28 → 16 marks, -42% drop)",
+      "ADSA subject attendance (74%) borderline below 75%"
+    ]
+  },
+  {
+    "id": "239X1A05D5",
+    "name": "Tahir Hussain",
+    "rollNo": "239X1A05D5",
+    "section": "CSE-D",
+    "mentor": "Dr. K. Govardhan Reddy",
+    "attendance": 63.5,
+    "currentCgpa": 6.15,
+    "riskLevel": "Critical",
+    "attendanceStatus": "Detained / Debarred (< 65%)",
+    "subjects": [
+      {
+        "code": "CST201",
+        "name": "Discrete Mathematics & Graph Theory",
+        "attendance": 62.0,
+        "internal1": 20,
+        "internal2": 18,
+        "quiz1": 6,
+        "quiz2": 5
+      },
+      {
+        "code": "CST202",
+        "name": "Advanced Data Structures & Algorithms",
+        "attendance": 60.0,
+        "internal1": 16,
+        "internal2": 14,
+        "quiz1": 5,
+        "quiz2": 6
+      },
+      {
+        "code": "CST203",
+        "name": "Digital Logic & Computer Organization",
+        "attendance": 68.0,
+        "internal1": 22,
+        "internal2": 24,
+        "quiz1": 7,
+        "quiz2": 7
+      },
+      {
+        "code": "HST201",
+        "name": "Managerial Economics & Financial Analysis",
+        "attendance": 64.0,
+        "internal1": 19,
+        "internal2": 18,
+        "quiz1": 6,
+        "quiz2": 6
+      }
+    ],
+    "flags": [
+      "Attendance 63.5% falls below 65% minimum threshold for condonation",
+      "Multiple subjects under 65% attendance"
+    ]
+  }
+]
